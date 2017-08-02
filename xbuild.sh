@@ -1,13 +1,5 @@
 #!/usr/bin/env bash
 
-#which i686-rpos-cc >/dev/null
-#if [ $? != 0 ]; then
-    #echo OS Toolchain is not in path. Cannot build.
-    #exit 1
-#fi
-#DESTDIR="$(readlink -f $PWD/../../../)"
-##../configure --prefix=/usr --target=i686-rpos
-
 abort() {
     MESSAGE=$1
     EXITCODE=$2
@@ -26,7 +18,7 @@ require_env() {
 }
 
 require_env "SYSROOT" "${SYSROOT}"
-require_env "PREFIX" "${PREFIX}"
+require_env "PREFIX" "${XPREFIX}"
 require_env "TARGET" "${TARGET}"
 require_env "PATH" "${PATH}"
 
@@ -35,6 +27,6 @@ mkdir -p newlib-build
 cd newlib-build
 
 ../configure \
-    --prefix=${PREFIX} \
+    --prefix=${XPREFIX} \
     --with-build-sysroot=${SYSROOT} \
     --target=${TARGET} && make all && make install
