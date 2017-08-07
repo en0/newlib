@@ -26,5 +26,14 @@ int stat(const char *file, struct stat *st) {}
 clock_t times(struct tms *buf) {}
 int unlink(char *name) {}
 int wait(int *status) {}
-int write(int file, char *ptr, int len) {}
+
+int write(int file, char *ptr, int len) {
+    asm (
+        "int $0x80"
+        :
+        : "a"(4), "b"(file), "c"(ptr), "d"(len) );
+
+    return len;
+}
+
 int gettimeofday(struct timeval *p, void *z) {}
