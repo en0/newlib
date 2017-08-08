@@ -18,7 +18,7 @@ void _exit() {
      * Exit a program without cleaning up files.
      */
 
-    asm("int $0x80" : : "a"(45), "b"(0));
+    asm("int $0x80" : : "a"(1), "b"(0));
 }
 
 int fork() {
@@ -103,7 +103,7 @@ int wait(int *status) {
 
 int link(char *old, char *new) {
 
-    /* ISR 80:9
+    /* ISR 80:8
      *
      * Establish a new name for an existing file.
      */
@@ -111,13 +111,13 @@ int link(char *old, char *new) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(9), "b"(old), "c"(new));
+        : "a"(8), "b"(old), "c"(new));
     return FORMAT_ERET(r);
 }
 
 int unlink(char *name) {
 
-    /* ISR 80:10
+    /* ISR 80:9
      *
      * Remove a file's directory entry.
      */
@@ -125,13 +125,13 @@ int unlink(char *name) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(10), "b"(name));
+        : "a"(9), "b"(name));
     return FORMAT_ERET(r);
 }
 
 int execve(char *name, char **argv, char **env) {
 
-    /* ISR 80:11
+    /* ISR 80:10
      *
      * Transfer control to a new process.
      */
@@ -139,13 +139,13 @@ int execve(char *name, char **argv, char **env) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(11), "b"(name), "c"(argv), "d"(env));
+        : "a"(10), "b"(name), "c"(argv), "d"(env));
     return FORMAT_ERET(r);
 }
 
 int lseek(int file, int ptr, int dir) {
 
-    /* ISR 80:19
+    /* ISR 80:11
      *
      * Set position in a file.
      */
@@ -153,13 +153,13 @@ int lseek(int file, int ptr, int dir) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(19), "b"(file), "c"(ptr), "d"(dir));
+        : "a"(11), "b"(file), "c"(ptr), "d"(dir));
     return FORMAT_ERET(r);
 }
 
 int getpid() {
 
-    /* ISR 80:20
+    /* ISR 80:12
      *
      * Process-ID; this is sometimes used to generate strings unlikely to
      * conflict with other processes.
@@ -168,13 +168,13 @@ int getpid() {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(20));
+        : "a"(12));
     return FORMAT_ERET(r);
 }
 
 int kill(int pid, int sig) {
 
-    /* ISR 80:37
+    /* ISR 80:13
      *
      * Send a signal.
      */
@@ -182,13 +182,13 @@ int kill(int pid, int sig) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(37), "b"(pid), "c"(sig));
+        : "a"(13), "b"(pid), "c"(sig));
     return FORMAT_ERET(r);
 }
 
 clock_t times(struct tms *buf) {
 
-    /* ISR 80:43
+    /* ISR 80:14
      *
      * Timing information for current process.
      */
@@ -196,13 +196,13 @@ clock_t times(struct tms *buf) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(43), "b"(buf));
+        : "a"(14), "b"(buf));
     return FORMAT_ERET(r);
 }
 
 caddr_t sbrk(int incr) {
 
-    /* ISR 80:45
+    /* ISR 80:15
      *
      * Increase program data space.
      */
@@ -210,14 +210,14 @@ caddr_t sbrk(int incr) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(45), "b"(incr));
+        : "a"(15), "b"(incr));
 
     return (caddr_t)FORMAT_ERET(r);
 }
 
 int gettimeofday(struct timeval *p, void *z) {
 
-    /* ISR 80:78
+    /* ISR 80:16
      *
      * Get timezone & seconds since 1-jan-1970.
      */
@@ -225,13 +225,13 @@ int gettimeofday(struct timeval *p, void *z) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(78), "b"(p), "c"(z));
+        : "a"(16), "b"(p), "c"(z));
     return FORMAT_ERET(r);
 }
 
 int stat(const char *file, struct stat *st) {
 
-    /* ISR 80:106
+    /* ISR 80:17
      *
      * Status of a file (by name).
      */
@@ -239,13 +239,13 @@ int stat(const char *file, struct stat *st) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(106), "b"(file), "c"(st));
+        : "a"(17), "b"(file), "c"(st));
     return FORMAT_ERET(r);
 }
 
 int fstat(int file, struct stat *st) {
 
-    /* ISR 80:108
+    /* ISR 80:18
      *
      * Status of an open file.
      */
@@ -253,13 +253,13 @@ int fstat(int file, struct stat *st) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(108), "b"(file), "c"(st));
+        : "a"(18), "b"(file), "c"(st));
     return FORMAT_ERET(r);
 }
 
 int isatty(int file) {
 
-    /* ISR 80:90
+    /* ISR 80:19
      *
      * Query whether output stream is a terminal.
      */
@@ -267,7 +267,7 @@ int isatty(int file) {
     int r;
     asm("int $0x80"
         : "=a"(r)
-        : "a"(1000), "b"(file));
+        : "a"(19), "b"(file));
     return FORMAT_ERET(r);
 }
 
